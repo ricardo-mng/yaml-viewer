@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YAML Viewer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; max-width: 480px; width: 90%; }
+  h1 { font-size: 14px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  pre { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 16px; font-size: 14px; line-height: 1.6; overflow-x: auto; white-space: pre; }
+  button { margin-top: 16px; width: 100%; padding: 10px; background: #238636; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; transition: background .2s; }
+  button:hover { background: #2ea043; }
+  button.copied { background: #1f6feb; }
+  .empty { color: #8b949e; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>YAML Viewer</h1>
+  <pre id="yaml"></pre>
+  <button onclick="copyYaml()">Copy to clipboard</button>
+</div>
+<script>
+const p = new URLSearchParams(location.search);
+const yaml = `resources:
+  requests:
+    cpu: ${p.get('req_cpu') || '???'}
+    memory: ${p.get('req_mem') || '???'}
+  limits:
+    cpu: ${p.get('lim_cpu') || '???'}
+    memory: ${p.get('lim_mem') || '???'}`;
+
+document.getElementById('yaml').textContent = yaml;
+
+function copyYaml() {
+  navigator.clipboard.writeText(yaml);
+  const btn = document.querySelector('button');
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy to clipboard'; btn.classList.remove('copied'); }, 2000);
+}
+</script>
+</body>
+</html>
